@@ -40,6 +40,6 @@ public class Main {
         
         bw.write(result + "");
         br.close();
-        bw.close();
+        bw.close(); 
     }
 }
