@@ -19,27 +19,21 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        Scanner sc = new Scanner(System.in);
+        String str = sc.next();
         
-        String[] S = br.readLine().split("");
-        int result = Integer.parseInt(S[0]);
-        
-        for(int i = 0; i < S.length; i++) {
-            if(i != S.length-1) {
-                int num = Integer.parseInt(S[i + 1]);
-                
-                if(num == 0 || num == 1 || result == 0) {
-                    result += num;
-                } else {
-                    result *= num;
-                }
+        // 첫번째 문자를 숫자로 변경한 값을 대입
+        long result = str.charAt(0) - '0';
+        for(int i = 1; i < str.length(); i++) {
+            // 두 수 중에서 하나라도 '0' 혹은 '1'인 경우, 곱하기보다는 더하기 수행
+            int num = str.charAt(i) - '0';
+            if (num <= 1 || result <= 1) {
+                result += num;
+            } 
+            else {
+                result *= num;
             }
         }
-        
-        bw.write(result + "");
-        br.close();
-        bw.close(); 
+        System.out.println(result);
     }
 }
