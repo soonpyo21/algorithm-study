@@ -2,49 +2,48 @@ import java.io.*;
 import java.util.Scanner;
 
 // 문제
-// 행복 왕국의 왕실 정원은 체스판과 같은 8 x 8 좌표 평면입니다. 왕실 정원의 특정한 한 칸에 나이트가 서있습니다. 나이트는 매우 충성스러운 신하로서 매일 무술을 연마합니다.
-// 나이트는 말을 타고 있기 때문에 이동을 할 때는 L자 형태로만 이동할 수 있으며 정원 밖으로는 나갈 수 없습니다.
-// 나이트는 특정 위치에서 다음과 같은 2가지 경우로 이동할 수 있습니다.
-// 1. 수평으로 두 칸 이동한 뒤에 수직으로 한 칸 이동하기
-// 2. 수직으로 두 칸 이동한 뒤에 수평으로 한 칸 이동하기
-// 이처럼 8 x 8 좌표 평면 상에서 나이트의 위치가 주어졌을 때 나이트가 이동할 수 있는 경우의 수를 출력하는 프로그램을 작성하세요.
-// 왕실의 정원에서 행 위치를 표현할 때는 1부터 8로 표현하며, 열 위치를 표현할 때는 a부터 h로 표현합니다.
-// ex) c2에 있을 때 이동할 수 있는 경우의 수는 6가지입니다.
-// ex) a1에 있을 때 이동할 수 있는 경우의 수는 2가지입니다.
+// 알파벳 대문자와 숫자(0 ~ 9)로만 구성된 문자열이 입력으로 주어집니다. 이때 모든 알파벳을 오름차순으로 정렬하여 이어서 출력한 뒤에,
+// 그 뒤에 모든 숫자를 더한 값을 이어서 출력합니다.
+// 예를 들어 K1KA5CB7이라는 값이 들어오면 ABCKK13을 출력합니다. 
 //
 // 입력
-// 첫째 줄에 8 x 8 좌표 평면 상에서 현재 나이트가 위치한 곳의 좌표를 나타내는 두 문자로 구성된 문자열이 입력된다.
-// 입력 문자는 a1처럼 열과 행으로 이뤄진다.
+// 첫째 줄에 하나의 문자열 S가 주어집니다. (1 <= S의 길이 <= 10000)
 //
 // 출력
-// 첫째 줄에 나이트가 이동할 수 있는 경우의 수를 출력하시오.
+// 첫째 줄에 문제에서 요구하는 정답을 출력합니다.
 
 public class Main {
 
-   public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        // 현재 나이트의 위치 입력받기
-        String inputData = sc.nextLine();
-        int row = inputData.charAt(1) - '0';
-        int column = inputData.charAt(0) - 'a' + 1;
-
-        // 나이트가 이동할 수 있는 8가지 방향 정의
-        int[] dx = {-2, -1, 1, 2, 2, 1, -1, -2};
-        int[] dy = {-1, -2, -2, -1, 1, 2, 2, 1};
-
-        // 8가지 방향에 대하여 각 위치로 이동이 가능한지 확인
-        int result = 0;
-        for (int i = 0; i < 8; i++) {
-            // 이동하고자 하는 위치 확인
-            int nextRow = row + dx[i];
-            int nextColumn = column + dy[i];
-            // 해당 위치로 이동이 가능하다면 카운트 증가
-            if (nextRow >= 1 && nextRow <= 8 && nextColumn >= 1 && nextColumn <= 8) {
-                result += 1;
-            }
-        }
-
-        System.out.println(result);
+   public static void main(String[] args) throws IOException {
+      
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+      
+      String S = br.readLine();
+      List<String> str = new ArrayList<>();
+      int sum = 0;
+      boolean isSum = false;
+      
+      for(int i = 0; i < S.length(); i ++) {
+         if(S.charAt(i) < 65) {
+            sum += Character.getNumericValue(S.charAt(i));
+            isSum = true;
+         } else {
+            str.add(String.valueOf(S.charAt(i)));
+         }
+         
+         Collections.sort(str);
+         String result = "";
+         
+         for(int i = 0; i < str.size(); i++) {
+            result += str.get(i);
+         }
+         
+         bw.write(result);
+         if(isSum) {
+            bw.write(sum + "");
+         }
+         br.close();
+         bw.close();
     }
 }
