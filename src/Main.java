@@ -1,6 +1,9 @@
 import java.io.*;
+//import java.util.Arrays;
+//import java.util.Scanner;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.Comparator;
+import java.util.StringTokenizer;
 
 /*
 문제
@@ -22,39 +25,40 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int N = Integer.parseInt(br.readLine());
-        int[] startTime = new int[N];
-        int[] endTime = new int[N];
+        int[][] time = new int[N][2];
+        StringTokenizer st;
 
         for(int i = 0; i < N; i ++) {
-            String[] input = br.readLine().split(" ");
-            startTime[i] = Integer.parseInt(input[0]);
-            endTime[i] = Integer.parseInt(input[1]);
+            st = new StringTokenizer(br.readLine(), " ");
+            time[i][0] = Integer.parseInt(st.nextToken());
+            time[i][1] = Integer.parseInt(st.nextToken());
         }
 
-        int minTime = Arrays.stream(startTime).min().getAsInt();
-        int maxTime = Arrays.stream(endTime).max().getAsInt();
-        int tmpTime = maxTime;
-        int cnt = 0;
+        // 끝나는 시간을 기준으로 정렬하기 위해 compare 재정의
+        Arrays.sort(time, new Comparator<int[]>() {
 
-        while(tmpTime == maxTime) {
-            for(int i = 0; i < N; i ++) {
-                if(startTime[i] == minTime) {   // 시작 시간이 가장 낮은 것들 중에
-                    if(endTime[i] < tmpTime) {  // 끝나는 시간이 tmpTime보다 작다면
-                        tmpTime = endTime[i];   // 현재 가장 빨리 끝나는 시간이다.
-                    }
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                // 종료시간이 같을 경우 시작시간이 빠른순으로 정렬
+                if(o1[1] == o2[1]) {
+                    return o1[0] - o2[0];
                 }
+                return o1[1] - o2[1];
             }
-            cnt++;
-            minTime = tmpTime;
-            System.out.println("]] 1 : " + minTime);
-            System.out.println("]] 2 : " + maxTime);
-        }
+        });
 
-        bw.write(cnt + "");
-        br.close();
-        bw.close();
+        int cnt = 0;
+        int prevEndTime = 0;
+
+        for(int i = 0; i < N; i ++) {
+            // 직전 종료 시간이 다음 회의 시작 시간보다 작거나 같다면 갱신한다.
+            if(prevEndTime <= time[i][0]) {
+                prevEndTime = time[i][1];
+                cnt ++;
+            }
+        }
+        System.out.println(cnt);
     }
 }
